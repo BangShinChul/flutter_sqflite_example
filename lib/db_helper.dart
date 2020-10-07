@@ -40,6 +40,14 @@ class DBHelper {
     return res;
   }
 
+  //Create
+  createDataByName(String name) async {
+    final db = await database;
+    var res =
+        await db.rawInsert('INSERT INTO $TableName(name) VALUES(?)', [name]);
+    return res;
+  }
+
   //Read
   getDog(int id) async {
     final db = await database;

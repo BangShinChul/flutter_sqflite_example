@@ -51,6 +51,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController _c;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _c = new TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     return Dismissible(
                       key: UniqueKey(),
                       onDismissed: (direction) {
+                        // 양 옆으로 슬라이드 동작이 감지되면 트리거되는 함수
                         DBHelper().deleteDog(item.id);
                         setState(() {});
                       },
@@ -100,6 +110,34 @@ class _MyHomePageState extends State<MyHomePage> {
                 Dog dog = dogs[Random().nextInt(dogs.length)];
                 DBHelper().createData(dog);
                 setState(() {});
+              },
+            ),
+            SizedBox(height: 8.0),
+            FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                //추가 버튼(popup)
+
+                showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                          child: new Column(
+                            children: <Widget>[
+                              new TextField(
+                                decoration: new InputDecoration(
+                                    hintText: "insert dog name"),
+                                controller: _c,
+                              ),
+                              new FlatButton(
+                                  onPressed: () {
+                                    DBHelper().createDataByName(_c.text);
+                                    setState(() {});
+                                    Navigator.pop(context);
+                                  },
+                                  child: new Text("Save"))
+                            ],
+                          ),
+                        ));
               },
             ),
           ],
